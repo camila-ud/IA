@@ -74,9 +74,14 @@ def dict_to_x_y(end,rat, python, maze, piecesOfCheese,rat_decision,python_decisi
         return False
     x_1 = utils.convert_input(player, maze, opponent, mazeHeight, mazeWidth, piecesOfCheese)
     y = np.zeros((1,4),dtype=np.int8)
+<<<<<<< HEAD
     print(decision.shape)
     y[0][translate_action[decision]] = 1 
     print(y.shape)
+=======
+    y[0][translate_action[decision]] = 1
+    print(decision.shape,y.shape)
+>>>>>>> bc56a850c469520cc15c577ee035ce1c500cdeff
     return x_1,y
 
 
