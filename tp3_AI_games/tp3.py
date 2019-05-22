@@ -76,8 +76,7 @@ def best_target(playerLocation, opponentLocation, playerScore, opponentScore, pi
     # playerScore + opponentScore + piecesOfCheese
     totalPieces = len(piecesOfCheese) + playerScore + opponentScore
     if playerScore > totalPieces / 2 or opponentScore > totalPieces / 2 or len(piecesOfCheese) == 0:
-        return (-1,-1), playerScore
-
+        return (-1,-1)
     # If the match is not over, then the player can aim for any of the remaining pieces of cheese
     # So we will simulate the game to each of the pieces, which will then by recurrence test all
     # the possible trees.
@@ -102,17 +101,17 @@ def best_target(playerLocation, opponentLocation, playerScore, opponentScore, pi
 # Without loss of generality, we can suppose it gets there moving vertically first then horizontally
 def updatePlayerLocation(target,playerLocation):    
     #ici -----
-    ax, ay = target
-    bx, by = playerLocation
-    if bx > ax:
-        return move(playerLocation,MOVE_RIGHT)
-    if bx < ax:
-        return move(playerLocation,MOVE_LEFT)
+    ax, ay = playerLocation
+    bx, by = target    
     if by > ay:
         return move(playerLocation,MOVE_UP)
     if by < ay:
         return move(playerLocation,MOVE_DOWN)
-    return playerLocation
+    if bx > ax:
+        return move(playerLocation,MOVE_RIGHT)
+    if bx < ax:
+        return move(playerLocation,MOVE_LEFT)
+    pass
 
 #FUNCTION TO COMPLETE, 
 #CHECK IF EITHER/BOTH PLAYERS ARE ON THE SAME SQUARE OF A CHEESE. 
@@ -127,14 +126,16 @@ def checkEatCheese(playerLocation,opponentLocation,playerScore,opponentScore,pie
             #remove piece of cheese
             piecesOfCheese.pop(piecesOfCheese.index(playerLocation)) 
             #both players are in the same square
-            if playerLocation == opponentLocation: playerScore = playerScore - 0.5 
+            if playerLocation == opponentLocation: 
+                playerScore = playerScore - 0.5 
     if opponentLocation in piecesOfCheese:
             #opponent on the same square of a cheese
             opponentScore = opponentScore + 1    
             #remove piece of cheese
             piecesOfCheese.pop(piecesOfCheese.index(opponentLocation)) 
             #both players are in the same square
-            if playerLocation == opponentLocation: opponentScore = opponentScore - 0.5 
+            if playerLocation == opponentLocation: 
+                opponentScore = opponentScore - 0.5 
     return playerScore,opponentScore
 
 
@@ -150,9 +151,11 @@ def simulate_game_until_target(target,playerLocation,opponentLocation,playerScor
         #Update playerLocation (position of your player) using updatePlayerLocation
         playerLocation = updatePlayerLocation(target,playerLocation)
         #Every time that we move the opponent also moves. update the position of the opponent using turn_of_opponent and move
-        opponentLocation = turn_of_opponent(opponentLocation,piecesOfCheese)
+        turn_ = turn_of_opponent(opponentLocation,piecesOfCheese) #decision
+        opponentLocation = move(opponentLocation,turn_) #move
         #Finally use the function checkEatCheese to see if any of the players is in the same square of a cheese.
-        playerScore,opponentScore = checkEatCheese(playerLocation,opponentLocation,playerScore,opponentScore,piecesOfCheese) 
+        playerScore , opponentScore = checkEatCheese(playerLocation,opponentLocation,playerScore,opponentScore,piecesOfCheese)
+        
     return playerLocation,opponentLocation,playerScore,opponentScore,piecesOfCheese
     
 
